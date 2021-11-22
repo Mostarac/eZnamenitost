@@ -1,5 +1,8 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,7 +13,7 @@ public class Opcina {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int opcinaId;
+	private Long opcinaId;
 	
 	@Column(name = "naziv")
 	private String naziv;
@@ -19,6 +22,11 @@ public class Opcina {
     @JoinColumn(name = "drzava_id", referencedColumnName = "drzavaId")
     @JsonIgnoreProperties("opcine")
     private Drzava drzava;
+	
+	@OneToMany(mappedBy = "opcina", fetch = FetchType.EAGER,
+            cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties("opcina")
+    private List<Znamenitost> znamenitosti = new ArrayList<>();
 	
 	public Opcina() {
 		
@@ -29,11 +37,11 @@ public class Opcina {
 		this.drzava = drzava;
 	}
 	
-	public int getOpcinaId() {
+	public Long getOpcinaId() {
 		return opcinaId;
 	}
 	
-	public void setOpcinaId(int opcinaId) {
+	public void setOpcinaId(Long opcinaId) {
 		this.opcinaId = opcinaId;
 	}
 	
@@ -43,6 +51,14 @@ public class Opcina {
 	
 	public void setNazivOpcine(String naziv) {
 		this.naziv = naziv;
+	}
+	
+	public List<Znamenitost> getZnamenitosti() {
+		return znamenitosti;
+	}
+	
+	public void setZnamenitosti (List<Znamenitost> znamenitosti) {
+		this.znamenitosti = znamenitosti;
 	}
 	
 }

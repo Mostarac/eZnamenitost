@@ -13,7 +13,7 @@ public class Drzava  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int drzavaId;
+	private Long drzavaId;
 	
 	@Column(name = "naziv")
 	private String naziv;
@@ -33,11 +33,11 @@ public class Drzava  {
 	}
 	
 	
-	public void setDrzavaId (int drzavaId) {
+	public void setDrzavaId (Long drzavaId) {
     	this.drzavaId = drzavaId;
     }
 	
-	public int getDrzavaId () {
+	public Long getDrzavaId () {
     	return drzavaId;
     }
 	

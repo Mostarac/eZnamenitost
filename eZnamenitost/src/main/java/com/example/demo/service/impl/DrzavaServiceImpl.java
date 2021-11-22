@@ -15,7 +15,7 @@ public class DrzavaServiceImpl implements DrzavaService {
 	@Autowired
     private DrzavaRepository drzavaRepository;
 
-	public Drzava findByDrzavaId(String drzavaId) {
+	public Drzava findByDrzavaId(Long drzavaId) {
 		return drzavaRepository.getById(drzavaId);
 	}
 

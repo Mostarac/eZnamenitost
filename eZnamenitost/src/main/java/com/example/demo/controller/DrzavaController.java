@@ -13,7 +13,7 @@ import com.example.demo.model.Drzava;
 import com.example.demo.service.DrzavaService;
 
 @RestController
-@RequestMapping(value="/drzava")
+@RequestMapping(value="/api/drzava")
 public class DrzavaController {
 
 	@Autowired

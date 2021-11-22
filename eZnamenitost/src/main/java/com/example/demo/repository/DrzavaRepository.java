@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.model.Drzava;
 
 @Repository
-public interface DrzavaRepository extends JpaRepository<Drzava, String> {
+public interface DrzavaRepository extends JpaRepository<Drzava, Long> {
 	
-	public Drzava findByDrzavaId(int drzavaId);
+	public Drzava findByDrzavaId(Long drzavaId);
 	
 }

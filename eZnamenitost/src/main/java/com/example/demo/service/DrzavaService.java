@@ -11,5 +11,5 @@ public interface DrzavaService {
 	
 	public List<Drzava> getAllDrzave();
 	
-	public Drzava findByDrzavaId(String drzavaId);
+	public Drzava findByDrzavaId(Long drzavaId);
 }
