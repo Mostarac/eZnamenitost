@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ public class Drzava  {
 	
     @OneToMany(mappedBy = "drzava", fetch = FetchType.EAGER,
             cascade = CascadeType.MERGE)
-    @JsonIgnoreProperties("drzava")
+    //@JsonIgnoreProperties("drzava")
+    @JsonIgnore
     private List<Opcina> opcine = new ArrayList<>();
 
     

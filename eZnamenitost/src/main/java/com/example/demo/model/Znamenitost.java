@@ -6,16 +6,21 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
+import org.hibernate.annotations.Formula;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -29,8 +34,7 @@ public class Znamenitost {
 	@Column(name = "naziv")
 	private String naziv;
 	
-	@Column(name = "opis")
-	@Lob
+	@Column(name = "opis", length=4096)
 	private String opis;
 	
 	@Column(name = "aktivno")
@@ -43,12 +47,22 @@ public class Znamenitost {
 	private double longitude;
 	
 	@Column(name = "vaznost")
+    @Enumerated(EnumType.STRING)
 	private ZnamenitostVaznost vaznost;
 	
     @OneToMany(mappedBy = "znamenitost", fetch = FetchType.EAGER,
             cascade = CascadeType.MERGE)
     @JsonIgnoreProperties("znamenitost")
     private List<ZnamenitostSlika> slike = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "znamenitost", fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    //@JsonIgnoreProperties("znamenitost")
+    @JsonIgnore
+    private List<OcjenaZnamenitost> ocjene = new ArrayList<>();
+    
+    @Formula("(SELECT AVG(ocz.ocjena) FROM ocjena_znamenitost AS ocz WHERE ocz.znamenitost_id=znamenitost_id)")
+    private Double ProsjecnaOcjena;
     
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "opcina_id", referencedColumnName = "opcinaId")
@@ -144,4 +158,13 @@ public class Znamenitost {
 	public void setOpcina(Opcina opcina) {
 		this.opcina = opcina;
 	}
+	
+	public Double getProsjecnaOcjena() {
+		return ProsjecnaOcjena;
+	}
+	
+	public void setProsjecnaOcjena(Double ProsjecnaOcjena) {
+		this.ProsjecnaOcjena = ProsjecnaOcjena;
+	}
+	
 }

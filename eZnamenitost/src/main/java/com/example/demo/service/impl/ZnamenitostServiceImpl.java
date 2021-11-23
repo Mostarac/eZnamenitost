@@ -1,12 +1,25 @@
 package com.example.demo.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.DTO.ZnamenitostSearchRequest;
 import com.example.demo.DTO.ZnamenitostUpsertDTO;
+import com.example.demo.model.OcjenaZnamenitost;
 import com.example.demo.model.Opcina;
 import com.example.demo.model.Znamenitost;
 import com.example.demo.model.ZnamenitostVaznost;
+import com.example.demo.repository.OcjenaZnamenitostRepository;
 import com.example.demo.repository.OpcinaRepository;
 import com.example.demo.repository.ZnamenitostRepository;
 import com.example.demo.service.ZnamenitostService;
@@ -19,6 +32,12 @@ public class ZnamenitostServiceImpl implements ZnamenitostService {
 	
 	@Autowired
 	private OpcinaRepository opcinaRepository;
+	
+	@Autowired
+	private OcjenaZnamenitostRepository ocjenaRepository;
+	
+	@PersistenceContext
+	EntityManager em;
 
 	public Znamenitost dodajZnamenitost(ZnamenitostUpsertDTO znamenitost) {
 		
@@ -60,6 +79,41 @@ public class ZnamenitostServiceImpl implements ZnamenitostService {
 		
 		return zn;
 		
+	}
+
+	public List<Znamenitost> getZnamenitosti(ZnamenitostSearchRequest znamenitost) {
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+	    CriteriaQuery<Znamenitost> cq = cb.createQuery(Znamenitost.class);
+
+	    Root<Znamenitost> znm = cq.from(Znamenitost.class);
+	    List<Predicate> predicates = new ArrayList<>();
+	    
+	    if (znamenitost.naziv != null) {
+	        predicates.add(cb.like(znm.get("naziv"), "%" + znamenitost.naziv + "%"));
+	    }
+	    if (znamenitost.vaznost != null) {
+	        predicates.add(cb.equal(znm.get("vaznost"), znamenitost.vaznost));
+	    }
+	    
+	    //Samo aktivne znamenitosti
+	    predicates.add(cb.equal(znm.get("aktivno"), true));
+	    
+	    cq.where(predicates.toArray(new Predicate[0]));
+
+	    return em.createQuery(cq).getResultList();
+	    
+	}
+
+	public OcjenaZnamenitost ocjeniZnamenitost(Long znamenitostId, Long ocjena) {
+		
+		Znamenitost zn = znamenitostRepository.findById(znamenitostId).get();
+		
+		OcjenaZnamenitost oz = new OcjenaZnamenitost(ocjena, zn);
+		
+		ocjenaRepository.saveAndFlush(oz);
+		
+		return oz;
 	}
 	
 }

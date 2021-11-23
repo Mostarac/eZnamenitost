@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -25,7 +26,8 @@ public class Opcina {
 	
 	@OneToMany(mappedBy = "opcina", fetch = FetchType.EAGER,
             cascade = CascadeType.MERGE)
-    @JsonIgnoreProperties("opcina")
+    //@JsonIgnoreProperties("opcina")
+	@JsonIgnore
     private List<Znamenitost> znamenitosti = new ArrayList<>();
 	
 	public Opcina() {

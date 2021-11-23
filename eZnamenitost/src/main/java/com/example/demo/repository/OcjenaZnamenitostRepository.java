@@ -1,14 +1,11 @@
 package com.example.demo.repository;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.model.Znamenitost;
+import com.example.demo.model.OcjenaZnamenitost;
 
 @Repository
-public interface ZnamenitostRepository extends JpaRepository<Znamenitost, Long> {
-
+public interface OcjenaZnamenitostRepository extends JpaRepository<OcjenaZnamenitost, Long> {
 	
 }
